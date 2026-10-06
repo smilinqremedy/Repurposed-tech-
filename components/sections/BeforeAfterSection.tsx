@@ -105,7 +105,7 @@ export function BeforeAfterSection() {
 
             <div className="pt-4 border-t border-white/10 flex items-center justify-between">
               <Link
-                href={`/product/${current.slug}`}
+                href={`/shop/${current.slug}`}
                 className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88] hover:underline"
               >
                 <span>VIEW THIS PIECE</span>

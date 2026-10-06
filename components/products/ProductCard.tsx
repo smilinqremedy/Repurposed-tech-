@@ -18,7 +18,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
   return (
     <Link
-      href={`/product/${product.slug}`}
+      href={`/shop/${product.slug}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       className="group block relative bg-[#0D0D0D] border border-white/10 rounded-sm overflow-hidden transition-all duration-300 hover:border-white/30 focus:outline-none focus:ring-1 focus:ring-white/40"
@@ -28,6 +28,10 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <Badge variant={product.status}>
           {product.status === "available"
             ? "AVAILABLE"
+            : product.status === "limited"
+            ? "LIMITED"
+            : product.status === "coming-soon"
+            ? "COMING SOON"
             : product.status === "low-stock"
             ? "LOW STOCK"
             : "SOLD OUT"}

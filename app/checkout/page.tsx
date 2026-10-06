@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cartContext";
 import { formatNaira } from "@/lib/currency";
 import { createOrder } from "@/lib/services";
+import { api } from "@/lib/api";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -46,25 +47,53 @@ export default function CheckoutPage() {
     setIsProcessing(true);
 
     try {
-      const order = await createOrder({
-        customer: formData,
-        items,
-        subtotal,
-        shippingMethod: selectedShipping.name,
-        shippingCost: selectedShipping.cost,
-        total: grandTotal,
-        status: "confirmed",
-        paymentMethod,
-        paymentStatus: "paid",
-        trackingNumber: `RT-NG-${Math.floor(100000 + Math.random() * 900000)}`,
-        estimatedDelivery: selectedShipping.estimate,
-      });
+      let paymentRef = `RT-NG-${Math.floor(100000 + Math.random() * 900000)}`;
+
+      if (paymentMethod === "paystack") {
+        try {
+          const payInit = await api.payments.initialize({
+            email: formData.email,
+            amount: grandTotal,
+            orderId: `RT-${Date.now()}`,
+          });
+          if (payInit?.reference) {
+            paymentRef = payInit.reference;
+          }
+        } catch (payErr) {
+          console.warn("Paystack init dev fallback", payErr);
+        }
+      }
+
+      let order: any;
+      try {
+        order = await api.orders.create({
+          customer: formData,
+          items,
+          shippingMethod,
+          paymentMethod,
+        });
+      } catch (apiErr) {
+        // Fallback to local services if offline/static
+        order = await createOrder({
+          customer: formData,
+          items,
+          subtotal,
+          shippingMethod: selectedShipping.name,
+          shippingCost: selectedShipping.cost,
+          total: grandTotal,
+          status: "confirmed",
+          paymentMethod,
+          paymentStatus: "paid",
+          trackingNumber: paymentRef,
+          estimatedDelivery: selectedShipping.estimate,
+        });
+      }
 
       // Clear the cart
       clearCart();
 
       // Navigate to order confirmation
-      router.push(`/checkout/success?orderNumber=${order.orderNumber}`);
+      router.push(`/checkout/success?orderNumber=${order.orderNumber}&reference=${paymentRef}`);
     } catch (err) {
       console.error("Order creation failed", err);
       setIsProcessing(false);

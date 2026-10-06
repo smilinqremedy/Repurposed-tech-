@@ -39,11 +39,27 @@ export type ExtraMod = {
   description: string;
 };
 
+export type ButtonOption = {
+  id: string;
+  name: string;
+  priceModifier: number;
+  description: string;
+};
+
+export type AudioOption = {
+  id: string;
+  name: string;
+  priceModifier: number;
+  description: string;
+};
+
 export type CustomBuildConfig = {
   deviceId: string;
   shellId: string;
   displayId: string;
   powerId: string;
+  buttonId?: string;
+  audioId?: string;
   selectedExtraIds: string[];
   customEngravingText?: string;
 };

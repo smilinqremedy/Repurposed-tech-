@@ -1,5 +1,6 @@
 export type Drop = {
   id: string;
+  slug: string;
   number: string;
   name: string;
   tagline: string;
@@ -16,19 +17,21 @@ export type Drop = {
 export const DROPS: Drop[] = [
   {
     id: "drop-001",
+    slug: "drop-001",
     number: "DROP 001",
     name: "THE REBIRTH COLLECTION",
     tagline: "Five forgotten machines. Five second lives.",
     status: "RELEASED",
     releaseDate: "OCTOBER 2026",
-    pieceCount: 5,
-    description: "Our inaugural release. We retrieved five obsolete electronic instruments across industrial salvage yards and dusty attics, stripped them down to atomic components, and rebuilt them with aerospace materials, laminated IPS screens, modern LiPo power, and audiophile-grade circuitry.",
+    pieceCount: 7,
+    description: "Our inaugural release. We retrieved obsolete electronic instruments across industrial salvage yards and dusty attics, stripped them down to atomic components, and rebuilt them with aerospace materials, laminated IPS screens, modern LiPo power, and audiophile-grade circuitry.",
     curatorNote: "Each piece in Drop 001 represents a milestone of consumer industrial engineering between 1974 and 2006. Once these individual editions are claimed, they will never be reproduced in this identical configuration.",
-    productIds: ["rt-001", "rt-002", "rt-003", "rt-004", "rt-005"],
+    productIds: ["rt-001", "rt-001b", "rt-001c", "rt-002", "rt-003", "rt-004", "rt-005"],
     bannerImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=85",
   },
   {
     id: "drop-002",
+    slug: "drop-002",
     number: "DROP 002",
     name: "SIGNAL LOST",
     tagline: "Analog radio telecommunications & cathode ray monuments.",
@@ -43,6 +46,7 @@ export const DROPS: Drop[] = [
   },
   {
     id: "drop-003",
+    slug: "drop-003",
     number: "DROP 003",
     name: "POCKET MACHINES",
     tagline: "Ultra-compact personal electronics from the golden decade.",
@@ -57,6 +61,7 @@ export const DROPS: Drop[] = [
   },
   {
     id: "drop-000",
+    slug: "vault-archive",
     number: "VAULT ARCHIVE",
     name: "FOUNDATION PROTOTYPES",
     tagline: "The experimental bench pieces that founded the studio.",

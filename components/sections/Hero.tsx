@@ -48,7 +48,7 @@ export function Hero() {
                 href="/drops"
                 className="px-8 py-4 bg-[#F5F5F0] text-black font-mono text-xs font-bold tracking-[0.2em] uppercase hover:bg-[#00FF88] transition-all duration-300 rounded-sm text-center shadow-[0_0_30px_rgba(255,255,255,0.15)] hover:shadow-[0_0_30px_rgba(0,255,136,0.3)] flex items-center justify-center gap-2"
               >
-                <span>SHOP THE LATEST DROP</span>
+                <span>SHOP THE DROP</span>
                 <span>→</span>
               </Link>
 
@@ -56,7 +56,7 @@ export function Hero() {
                 href="/restoration"
                 className="px-7 py-4 bg-transparent text-[#F5F5F0] border border-white/15 hover:border-white/40 hover:bg-white/[0.04] font-mono text-xs font-medium tracking-[0.18em] uppercase transition-all duration-300 rounded-sm text-center"
               >
-                EXPLORE THE PROCESS
+                EXPLORE THE RESTORATION
               </Link>
             </div>
 
@@ -109,22 +109,25 @@ export function Hero() {
                 </div>
 
                 {/* Bottom Card Detail */}
-                <div className="absolute inset-x-4 bottom-4 z-10 p-4 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-sm">
+                <Link
+                  href="/shop/game-boy-color-atomic-purple"
+                  className="absolute inset-x-4 bottom-4 z-10 p-4 bg-[#0A0A0A]/90 backdrop-blur-md border border-white/10 rounded-sm hover:border-[#00FF88]/40 transition-colors block"
+                >
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-mono tracking-widest uppercase text-neutral-400">
                         RETRO GAMING
                       </span>
-                      <h3 className="text-sm font-medium text-white">
+                      <h3 className="text-sm font-medium text-white hover:text-[#00FF88] transition-colors">
                         Game Boy Color — Atomic Purple
                       </h3>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-mono text-[#00FF88]">₦145,000</span>
-                      <span className="block text-[9px] font-mono text-neutral-400">1 OF 3</span>
+                      <span className="text-xs font-mono text-[#00FF88] font-bold">₦185,000</span>
+                      <span className="block text-[9px] font-mono text-neutral-400">1 OF 3 • AVAILABLE</span>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
 
               {/* Decorative side accent lines */}

@@ -10,6 +10,7 @@ export const SITE_CONFIG = {
     { label: "RESTORATION", href: "/restoration" },
     { label: "CUSTOM BUILD", href: "/build" },
     { label: "ABOUT", href: "/about" },
+    { label: "CONTACT", href: "/contact" },
   ],
   footerLinks: {
     shop: [
@@ -27,13 +28,14 @@ export const SITE_CONFIG = {
     help: [
       { label: "White Glove Shipping", href: "/about#shipping" },
       { label: "Authenticity Guarantee", href: "/about#guarantee" },
-      { label: "Contact Studio", href: "mailto:concierge@repurposedtech.studio" },
+      { label: "Contact Studio", href: "/contact" },
       { label: "Order Tracking", href: "/checkout/success" },
     ],
     social: [
       { label: "Instagram", href: "https://instagram.com" },
-      { label: "YouTube", href: "https://youtube.com" },
       { label: "TikTok", href: "https://tiktok.com" },
+      { label: "X (Twitter)", href: "https://x.com" },
+      { label: "YouTube", href: "https://youtube.com" },
     ],
   },
 };

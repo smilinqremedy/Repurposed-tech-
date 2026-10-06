@@ -4,8 +4,8 @@ import { PRODUCTS } from "@/lib/products";
 import { ProductCard } from "@/components/products/ProductCard";
 
 export function LatestDrop() {
-  // Drop 001 contains the first 5 products
-  const dropProducts = PRODUCTS.slice(0, 5);
+  // Drop 001 spotlights the three flagship retro gaming pieces
+  const dropProducts = PRODUCTS.slice(0, 3);
 
   return (
     <section className="py-24 bg-[#0A0A0A] border-t border-white/10 relative">
@@ -23,7 +23,7 @@ export function LatestDrop() {
               DROP 001 — THE REBIRTH COLLECTION
             </h2>
             <p className="text-base text-neutral-400 font-mono tracking-wide">
-              Five forgotten machines. Five second lives.
+              Three forgotten handheld icons. Restored by hand, rebuilt for another generation.
             </p>
           </div>
 
@@ -32,19 +32,16 @@ export function LatestDrop() {
               href="/drops"
               className="text-xs font-mono tracking-[0.2em] uppercase text-neutral-400 hover:text-[#00FF88] transition-colors flex items-center gap-1.5"
             >
-              <span>VIEW DROP DOSSIER</span>
+              <span>VIEW FULL DOSSIER</span>
               <span>→</span>
             </Link>
           </div>
         </div>
 
-        {/* EDITORIAL PRODUCTS GRID */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* EDITORIAL PRODUCTS GRID - 3 HERO PIECES */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {dropProducts.map((product, idx) => (
-            <div
-              key={product.id}
-              className={idx === 0 ? "sm:col-span-2 lg:col-span-2" : "col-span-1"}
-            >
+            <div key={product.id} className="col-span-1">
               <ProductCard product={product} priority={idx === 0} />
             </div>
           ))}

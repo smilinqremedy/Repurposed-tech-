@@ -2,16 +2,26 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { DEVICES, SHELLS, DISPLAYS, POWERS, EXTRAS } from "@/lib/buildOptions";
+import {
+  DEVICES,
+  SHELLS,
+  DISPLAYS,
+  POWERS,
+  BUTTONS,
+  AUDIOS,
+  EXTRAS,
+} from "@/lib/buildOptions";
 import { formatNaira } from "@/lib/currency";
 import { useCart } from "@/lib/cartContext";
 
 export default function CustomBuildPage() {
   const [selectedDevice, setSelectedDevice] = useState(DEVICES[0]);
   const [selectedShell, setSelectedShell] = useState(SHELLS[0]);
-  const [selectedDisplay, setSelectedDisplay] = useState(DISPLAYS[2]); // Default Premium IPS
-  const [selectedPower, setSelectedPower] = useState(POWERS[1]); // Default Extended Battery
-  const [selectedExtras, setSelectedExtras] = useState<string[]>([EXTRAS[0].id]); // Default USB-C
+  const [selectedDisplay, setSelectedDisplay] = useState(DISPLAYS[1]); // Default IPS
+  const [selectedPower, setSelectedPower] = useState(POWERS[2]); // Default USB-C rechargeable
+  const [selectedButton, setSelectedButton] = useState(BUTTONS[0]); // Default Classic OEM
+  const [selectedAudio, setSelectedAudio] = useState(AUDIOS[1]); // Default Upgraded CleanAmp
+  const [selectedExtras, setSelectedExtras] = useState<string[]>([EXTRAS[0].id]); // Default Laser engraving
   const [engravingText, setEngravingText] = useState("");
   const [orderRequested, setOrderRequested] = useState(false);
 
@@ -28,6 +38,8 @@ export default function CustomBuildPage() {
     selectedShell.priceModifier +
     selectedDisplay.priceModifier +
     selectedPower.priceModifier +
+    selectedButton.priceModifier +
+    selectedAudio.priceModifier +
     extrasTotal;
 
   const toggleExtra = (id: string) => {
@@ -42,7 +54,7 @@ export default function CustomBuildPage() {
       .filter(Boolean)
       .join(", ");
 
-    const configurationSummary = `${selectedDevice.name} • ${selectedShell.name} • ${selectedDisplay.name} • ${selectedPower.name} • Extras: [${extrasNames || "None"}]${
+    const configurationSummary = `${selectedDevice.name} • Shell: ${selectedShell.name} • Display: ${selectedDisplay.name} • Power: ${selectedPower.name} • Buttons: ${selectedButton.name} • Audio: ${selectedAudio.name} • Extras: [${extrasNames || "None"}]${
       engravingText ? ` • Engraving: "${engravingText}"` : ""
     }`;
 
@@ -75,11 +87,11 @@ export default function CustomBuildPage() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-black uppercase tracking-tight text-[#F5F5F0]">
-            BUILD YOUR MACHINE
+            BUILD YOUR OWN.
           </h1>
 
           <p className="text-sm sm:text-base text-neutral-400 font-mono tracking-wide max-w-2xl">
-            Select your hardware platform, optical screen technology, custom enclosure, and hardware mods. We handcraft your machine in our Lagos lab.
+            Configure a bespoke restoration at our Lagos lab. Select your base platform, shell, display, battery architecture, tactile buttons, and acoustic mods.
           </p>
         </div>
 
@@ -91,9 +103,9 @@ export default function CustomBuildPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
-                  01 — CHOOSE YOUR DEVICE
+                  01 — DEVICE PLATFORM
                 </span>
-                <span className="text-xs font-mono text-neutral-500">BASE PLATFORM</span>
+                <span className="text-xs font-mono text-neutral-500">BASE HARDWARE</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -101,15 +113,16 @@ export default function CustomBuildPage() {
                   const isSelected = selectedDevice.id === device.id;
                   return (
                     <button
+                      type="button"
                       key={device.id}
                       onClick={() => setSelectedDevice(device)}
-                      className={`p-4 rounded-sm border text-left flex flex-col justify-between space-y-4 transition-all ${
+                      className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
-                          : "bg-[#0E0E0E] border-white/10 hover:border-white/30"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
                       }`}
                     >
-                      <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-black">
+                      <div className="relative aspect-square w-full rounded-sm overflow-hidden mb-3 bg-black">
                         <Image
                           src={device.previewImage}
                           alt={device.name}
@@ -118,149 +131,208 @@ export default function CustomBuildPage() {
                           className="object-cover"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <h4 className="text-sm font-bold text-[#F5F5F0]">{device.name}</h4>
-                        <p className="text-[11px] text-neutral-400 line-clamp-2">{device.description}</p>
-                        <span className="text-xs font-mono text-[#00FF88] block pt-1">
-                          Base: {formatNaira(device.basePrice)}
-                        </span>
-                      </div>
+                      <h3 className="text-xs font-bold text-white uppercase">{device.name}</h3>
+                      <p className="text-[11px] font-mono text-[#00FF88] mt-1 font-bold">
+                        {formatNaira(device.basePrice)}
+                      </p>
+                      <p className="text-[10px] text-neutral-500 mt-1 line-clamp-2">
+                        {device.description}
+                      </p>
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* STEP 2: CHOOSE YOUR SHELL */}
+            {/* STEP 2: SHELL HOUSING */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
-                  02 — CHOOSE YOUR SHELL
+                  02 — SHELL CASING
                 </span>
-                <span className="text-xs font-mono text-neutral-500">HOUSING & COLOR</span>
+                <span className="text-xs font-mono text-neutral-500">OPTICAL & TEXTURE</span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {SHELLS.map((shell) => {
                   const isSelected = selectedShell.id === shell.id;
                   return (
                     <button
+                      type="button"
                       key={shell.id}
                       onClick={() => setSelectedShell(shell)}
-                      className={`p-4 rounded-sm border text-left space-y-3 transition-all ${
+                      className={`p-3.5 rounded-sm border text-left transition-all relative ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
-                          : "bg-[#0E0E0E] border-white/10 hover:border-white/30"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <div
-                          className="w-6 h-6 rounded-full border border-white/20 shadow-inner"
+                      {shell.badge && (
+                        <span className="absolute top-2 right-2 text-[9px] font-mono text-[#00FF88] bg-[#00FF88]/10 px-1.5 py-0.5 rounded-sm">
+                          {shell.badge}
+                        </span>
+                      )}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span
+                          className="w-3.5 h-3.5 rounded-full border border-white/20"
                           style={{ backgroundColor: shell.colorHex }}
                         />
-                        {shell.badge && (
-                          <span className="text-[9px] font-mono uppercase text-[#00FF88] border border-[#00FF88]/30 px-1 rounded-xs">
-                            {shell.badge}
-                          </span>
-                        )}
+                        <h4 className="text-xs font-bold text-white uppercase">{shell.name}</h4>
                       </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white">{shell.name}</h4>
-                        <p className="text-[10px] font-mono text-neutral-400 mt-0.5">
-                          +{formatNaira(shell.priceModifier)}
-                        </p>
-                      </div>
+                      <p className="text-[11px] font-mono text-[#00FF88]">
+                        +{formatNaira(shell.priceModifier)}
+                      </p>
+                      <p className="text-[10px] text-neutral-500 mt-1">{shell.material}</p>
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* STEP 3: CHOOSE YOUR DISPLAY */}
+            {/* STEP 3: DISPLAY UPGRADE */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
-                  03 — CHOOSE YOUR DISPLAY
+                  03 — SCREEN ARCHITECTURE
                 </span>
-                <span className="text-xs font-mono text-neutral-500">OPTICAL ASSEMBLY</span>
+                <span className="text-xs font-mono text-neutral-500">OPTICAL DISPLAY</span>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {DISPLAYS.map((disp) => {
                   const isSelected = selectedDisplay.id === disp.id;
                   return (
                     <button
+                      type="button"
                       key={disp.id}
                       onClick={() => setSelectedDisplay(disp)}
-                      className={`w-full p-4 rounded-sm border text-left flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all ${
+                      className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
-                          : "bg-[#0E0E0E] border-white/10 hover:border-white/30"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
                       }`}
                     >
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-bold text-[#F5F5F0]">{disp.name}</h4>
-                          <span className="text-[10px] font-mono text-neutral-400 px-1.5 py-0.5 bg-white/5 rounded-xs">
-                            {disp.tech}
-                          </span>
-                        </div>
-                        <p className="text-xs text-neutral-400">{disp.description}</p>
-                      </div>
-                      <div className="text-right flex-shrink-0">
-                        <span className="text-xs font-mono text-[#00FF88]">
-                          {disp.priceModifier === 0 ? "Included" : `+${formatNaira(disp.priceModifier)}`}
-                        </span>
-                      </div>
+                      <h4 className="text-xs font-bold text-white uppercase">{disp.name}</h4>
+                      <p className="text-[11px] font-mono text-[#00FF88] my-1 font-bold">
+                        {disp.priceModifier === 0 ? "INCLUDED" : `+${formatNaira(disp.priceModifier)}`}
+                      </p>
+                      <p className="text-[10px] text-neutral-400">{disp.description}</p>
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* STEP 4: CHOOSE YOUR POWER */}
+            {/* STEP 4: BATTERY & POWER */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
-                  04 — CHOOSE YOUR POWER
+                  04 — BATTERY & CHARGING
                 </span>
-                <span className="text-xs font-mono text-neutral-500">BATTERY & RUNTIME</span>
+                <span className="text-xs font-mono text-neutral-500">POWER DELIVERY</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {POWERS.map((pow) => {
                   const isSelected = selectedPower.id === pow.id;
                   return (
                     <button
+                      type="button"
                       key={pow.id}
                       onClick={() => setSelectedPower(pow)}
-                      className={`p-4 rounded-sm border text-left space-y-2 transition-all ${
+                      className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
-                          : "bg-[#0E0E0E] border-white/10 hover:border-white/30"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
                       }`}
                     >
-                      <div className="flex justify-between items-center">
-                        <h4 className="text-sm font-bold text-[#F5F5F0]">{pow.name}</h4>
-                        <span className="text-xs font-mono text-[#00FF88]">
-                          {pow.priceModifier === 0 ? "Standard" : `+${formatNaira(pow.priceModifier)}`}
-                        </span>
-                      </div>
-                      <p className="text-xs font-mono text-neutral-400">{pow.capacity}</p>
-                      <p className="text-[11px] text-neutral-500">{pow.batteryLife}</p>
+                      <h4 className="text-xs font-bold text-white uppercase">{pow.name}</h4>
+                      <p className="text-[11px] font-mono text-[#00FF88] my-1 font-bold">
+                        {pow.priceModifier === 0 ? "INCLUDED" : `+${formatNaira(pow.priceModifier)}`}
+                      </p>
+                      <p className="text-[10px] text-neutral-400">{pow.capacity}</p>
+                      <p className="text-[10px] text-neutral-500">{pow.batteryLife}</p>
                     </button>
                   );
                 })}
               </div>
             </section>
 
-            {/* STEP 5: ADD EXTRAS & LASER ENGRAVING */}
+            {/* STEP 5: TACTILE BUTTONS */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
-                  05 — ADD HARDWARE EXTRAS
+                  05 — TACTILE BUTTONS
                 </span>
-                <span className="text-xs font-mono text-neutral-500">MODS & CALLSIGN</span>
+                <span className="text-xs font-mono text-neutral-500">SWITCH ACTUATION</span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {BUTTONS.map((btn) => {
+                  const isSelected = selectedButton.id === btn.id;
+                  return (
+                    <button
+                      type="button"
+                      key={btn.id}
+                      onClick={() => setSelectedButton(btn)}
+                      className={`p-3.5 rounded-sm border text-left transition-all ${
+                        isSelected
+                          ? "bg-white/[0.06] border-white ring-1 ring-white"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
+                      }`}
+                    >
+                      <h4 className="text-xs font-bold text-white uppercase">{btn.name}</h4>
+                      <p className="text-[11px] font-mono text-[#00FF88] my-1 font-bold">
+                        {btn.priceModifier === 0 ? "INCLUDED" : `+${formatNaira(btn.priceModifier)}`}
+                      </p>
+                      <p className="text-[10px] text-neutral-500">{btn.description}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* STEP 6: AUDIO CIRCUITRY */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
+                  06 — ACOUSTIC OVERHAUL
+                </span>
+                <span className="text-xs font-mono text-neutral-500">SPEAKER & AMP</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {AUDIOS.map((aud) => {
+                  const isSelected = selectedAudio.id === aud.id;
+                  return (
+                    <button
+                      type="button"
+                      key={aud.id}
+                      onClick={() => setSelectedAudio(aud)}
+                      className={`p-4 rounded-sm border text-left transition-all ${
+                        isSelected
+                          ? "bg-white/[0.06] border-white ring-1 ring-white"
+                          : "bg-[#0E0E0E] border-white/10 hover:border-white/25"
+                      }`}
+                    >
+                      <h4 className="text-xs font-bold text-white uppercase">{aud.name}</h4>
+                      <p className="text-[11px] font-mono text-[#00FF88] my-1 font-bold">
+                        {aud.priceModifier === 0 ? "INCLUDED" : `+${formatNaira(aud.priceModifier)}`}
+                      </p>
+                      <p className="text-[10px] text-neutral-400">{aud.description}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* STEP 7: EXTRAS & ENGRAVING */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#00FF88]">
+                  07 — EXTRAS & PRESENTATION
+                </span>
+                <span className="text-xs font-mono text-neutral-500">BESPOKE FINISHING</span>
               </div>
 
               <div className="space-y-3">
@@ -325,7 +397,7 @@ export default function CustomBuildPage() {
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#00FF88]" />
                   <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#F5F5F0] font-bold">
-                    YOUR BUILD SUMMARY
+                    YOUR BUILD
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-[#00FF88] border border-[#00FF88]/30 px-2 py-0.5 rounded-sm">
@@ -354,35 +426,51 @@ export default function CustomBuildPage() {
                 </div>
               </div>
 
-              {/* Dynamic Line-Item Spec Breakdown */}
+              {/* Dynamic Line-Item Spec Breakdown matching Master Prompt Section 17 */}
               <div className="space-y-3 font-mono text-xs divide-y divide-white/5">
                 <div className="flex justify-between pt-1 text-neutral-300">
-                  <span className="text-neutral-500 uppercase">BASE HARDWARE</span>
-                  <span>{selectedDevice.name}</span>
+                  <span className="text-neutral-500 uppercase">Base Device</span>
+                  <span className="text-white">{formatNaira(selectedDevice.basePrice)}</span>
                 </div>
                 <div className="flex justify-between pt-2 text-neutral-300">
-                  <span className="text-neutral-500 uppercase">CHASSIS HOUSING</span>
-                  <span>{selectedShell.name}</span>
+                  <span className="text-neutral-500 uppercase">Shell ({selectedShell.name})</span>
+                  <span className="text-white">
+                    {selectedShell.priceModifier === 0 ? "INCLUDED" : formatNaira(selectedShell.priceModifier)}
+                  </span>
                 </div>
                 <div className="flex justify-between pt-2 text-neutral-300">
-                  <span className="text-neutral-500 uppercase">DISPLAY TECH</span>
-                  <span>{selectedDisplay.name}</span>
+                  <span className="text-neutral-500 uppercase">Screen ({selectedDisplay.name})</span>
+                  <span className="text-white">
+                    {selectedDisplay.priceModifier === 0 ? "INCLUDED" : formatNaira(selectedDisplay.priceModifier)}
+                  </span>
                 </div>
                 <div className="flex justify-between pt-2 text-neutral-300">
-                  <span className="text-neutral-500 uppercase">POWER STAGE</span>
-                  <span>{selectedPower.name}</span>
+                  <span className="text-neutral-500 uppercase">Battery ({selectedPower.name})</span>
+                  <span className="text-white">
+                    {selectedPower.priceModifier === 0 ? "INCLUDED" : formatNaira(selectedPower.priceModifier)}
+                  </span>
+                </div>
+                <div className="flex justify-between pt-2 text-neutral-300">
+                  <span className="text-neutral-500 uppercase">Buttons ({selectedButton.name})</span>
+                  <span className="text-white">
+                    {selectedButton.priceModifier === 0 ? "INCLUDED" : formatNaira(selectedButton.priceModifier)}
+                  </span>
+                </div>
+                <div className="flex justify-between pt-2 text-neutral-300">
+                  <span className="text-neutral-500 uppercase">Audio ({selectedAudio.name})</span>
+                  <span className="text-white">
+                    {selectedAudio.priceModifier === 0 ? "INCLUDED" : formatNaira(selectedAudio.priceModifier)}
+                  </span>
                 </div>
                 {selectedExtras.length > 0 && (
                   <div className="flex justify-between pt-2 text-neutral-300">
-                    <span className="text-neutral-500 uppercase">EXTRAS</span>
-                    <span className="text-right">
-                      {selectedExtras.map((id) => EXTRAS.find((e) => e.id === id)?.name).join(", ")}
-                    </span>
+                    <span className="text-neutral-500 uppercase">Extras</span>
+                    <span className="text-white">{formatNaira(extrasTotal)}</span>
                   </div>
                 )}
                 {engravingText && (
                   <div className="flex justify-between pt-2 text-neutral-300">
-                    <span className="text-neutral-500 uppercase">ENGRAVING</span>
+                    <span className="text-neutral-500 uppercase">Engraving</span>
                     <span className="text-[#00FF88]">"{engravingText}"</span>
                   </div>
                 )}
@@ -392,9 +480,9 @@ export default function CustomBuildPage() {
               <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 block">
-                    TOTAL COMMISSION PRICE
+                    TOTAL
                   </span>
-                  <span className="text-2xl font-mono font-bold text-[#F5F5F0]">
+                  <span className="text-2xl font-mono font-bold text-[#00FF88]">
                     {formatNaira(totalPrice)}
                   </span>
                 </div>
@@ -403,9 +491,10 @@ export default function CustomBuildPage() {
                 </span>
               </div>
 
-              {/* Primary CTA */}
+              {/* Primary CTA matching Master Prompt Section 17 */}
               <div className="space-y-2">
                 <button
+                  type="button"
                   onClick={handleRequestBuild}
                   className="w-full py-4 bg-white text-black font-mono text-xs font-bold uppercase tracking-[0.2em] hover:bg-[#00FF88] transition-colors rounded-sm shadow-xl flex items-center justify-center gap-2"
                 >

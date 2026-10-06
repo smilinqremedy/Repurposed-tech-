@@ -138,9 +138,17 @@ export default function DropsPage() {
                 "{drop001.curatorNote}"
               </p>
             </div>
-            <span className="text-xs font-mono text-[#00FF88] uppercase tracking-wider flex-shrink-0">
-              DISPATCH READY
-            </span>
+            <div className="flex items-center gap-3">
+              <Link
+                href={`/drops/${drop001.slug}`}
+                className="text-xs font-mono text-[#00FF88] uppercase tracking-wider hover:underline"
+              >
+                VIEW FULL DOSSIER →
+              </Link>
+              <span className="text-xs font-mono text-neutral-400 uppercase tracking-wider flex-shrink-0">
+                DISPATCH READY
+              </span>
+            </div>
           </div>
 
           {/* Products in Drop 001 */}
@@ -189,9 +197,11 @@ export default function DropsPage() {
                     <span className="text-xs font-mono text-neutral-400 uppercase tracking-widest block">
                       {drop.number} • {drop.releaseDate}
                     </span>
-                    <h3 className="text-xl font-bold uppercase text-white tracking-tight">
-                      {drop.name}
-                    </h3>
+                    <Link href={`/drops/${drop.slug}`}>
+                      <h3 className="text-xl font-bold uppercase text-white tracking-tight hover:text-[#00FF88] transition-colors">
+                        {drop.name}
+                      </h3>
+                    </Link>
                   </div>
                 </div>
 
@@ -206,9 +216,12 @@ export default function DropsPage() {
                   </div>
 
                   <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-neutral-500 uppercase">
-                      {drop.pieceCount} PIECES COMMISSIONED
-                    </span>
+                    <Link
+                      href={`/drops/${drop.slug}`}
+                      className="text-[11px] font-mono text-neutral-400 hover:text-white uppercase transition-colors"
+                    >
+                      DOSSIER →
+                    </Link>
 
                     {notifiedDrops[drop.number] ? (
                       <span className="text-xs font-mono text-[#00FF88] uppercase tracking-wider">

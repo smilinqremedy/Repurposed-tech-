@@ -1,4 +1,5 @@
 import { PRODUCTS } from "./products";
+import { DROPS, Drop } from "./drops";
 import { Product, FilterOptions } from "@/types/product";
 import { Order } from "@/types/order";
 
@@ -199,6 +200,21 @@ export async function getProductById(id: string): Promise<Product | null> {
  */
 export async function getFeaturedProducts(): Promise<Product[]> {
   return PRODUCTS.filter((p) => p.featured);
+}
+
+/**
+ * Service function: Fetch all drops
+ */
+export async function getDrops(): Promise<Drop[]> {
+  return [...DROPS];
+}
+
+/**
+ * Service function: Fetch drop by slug or ID
+ */
+export async function getDropBySlug(slug: string): Promise<Drop | null> {
+  const drop = DROPS.find((d) => d.slug === slug || d.id === slug);
+  return drop || null;
 }
 
 /**

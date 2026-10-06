@@ -8,7 +8,7 @@ export type Product = {
   price: number;
   originalReleaseYear?: number;
   images: string[];
-  status: "available" | "low-stock" | "sold-out";
+  status: "available" | "low-stock" | "sold-out" | "coming-soon" | "limited";
   stock: number;
   edition: string; // e.g. "01 / 03"
   era: "80s" | "90s" | "00s" | "Vintage";
