@@ -328,6 +328,36 @@ export default function CheckoutPage() {
                       </p>
                     </div>
                   </div>
+
+                  {paymentMethod === "bank_transfer" && (
+                    <div className="p-4 bg-black/60 border border-[#00FF88]/30 rounded-sm space-y-3 font-mono text-xs animate-in fade-in">
+                      <div className="flex items-center justify-between text-[#00FF88] text-[11px] tracking-wider font-bold">
+                        <span>STUDIO ESCROW WIRE TELEMETRY</span>
+                        <span>LAGOS BENCH</span>
+                      </div>
+                      <div className="space-y-1.5 text-neutral-300 divide-y divide-white/5">
+                        <div className="flex justify-between pt-1">
+                          <span className="text-neutral-500 uppercase">Bank:</span>
+                          <span className="text-white font-bold">Guaranty Trust Bank (GTB)</span>
+                        </div>
+                        <div className="flex justify-between pt-1">
+                          <span className="text-neutral-500 uppercase">Account Name:</span>
+                          <span className="text-white font-bold">REPURPOSED TECH ATELIER LTD</span>
+                        </div>
+                        <div className="flex justify-between pt-1">
+                          <span className="text-neutral-500 uppercase">Account Number:</span>
+                          <span className="text-[#00FF88] font-bold tracking-widest text-sm">0824910284</span>
+                        </div>
+                        <div className="flex justify-between pt-1">
+                          <span className="text-neutral-500 uppercase">Branch / Swift:</span>
+                          <span className="text-neutral-400">Lekki Phase 1 • GTBINGLA</span>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-neutral-400 pt-1 leading-relaxed">
+                        After wiring, click Complete Reservation below. Dispatch will immediately verify receipt and initiate calibration.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </section>
             </div>

@@ -24,6 +24,70 @@ export default function CustomBuildPage() {
   const [selectedExtras, setSelectedExtras] = useState<string[]>([EXTRAS[0].id]); // Default Laser engraving
   const [engravingText, setEngravingText] = useState("");
   const [orderRequested, setOrderRequested] = useState(false);
+  const [scanlinesActive, setScanlinesActive] = useState(false);
+  const [copiedSpec, setCopiedSpec] = useState(false);
+
+  const handleCopySpec = () => {
+    const extrasNames = selectedExtras
+      .map((id) => EXTRAS.find((e) => e.id === id)?.name)
+      .filter(Boolean)
+      .join(", ");
+
+    const text = `REPURPOSED TECH BESPOKE COMMISSION DOSSIER\n` +
+      `Platform: ${selectedDevice.name}\n` +
+      `Shell: ${selectedShell.name} (${selectedShell.material})\n` +
+      `Screen: ${selectedDisplay.name}\n` +
+      `Battery: ${selectedPower.name}\n` +
+      `Buttons: ${selectedButton.name}\n` +
+      `Audio: ${selectedAudio.name}\n` +
+      `Extras: ${extrasNames || "None"}\n` +
+      (engravingText ? `Engraving: "${engravingText}"\n` : "") +
+      `Total Estimate: ${formatNaira(totalPrice)}\n` +
+      `Atelier: Lagos Bench, Nigeria`;
+
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
+    setCopiedSpec(true);
+    setTimeout(() => setCopiedSpec(false), 2500);
+  };
+
+  const applyPreset = (presetName: "cyber" | "stealth" | "clear") => {
+    if (presetName === "cyber") {
+      const gbc = DEVICES.find((d) => d.id === "gbc") || DEVICES[0];
+      const purple = SHELLS.find((s) => s.id === "atomic-purple") || SHELLS[0];
+      setSelectedDevice(gbc);
+      setSelectedShell(purple);
+      setSelectedDisplay(DISPLAYS[1]);
+      setSelectedPower(POWERS[2]);
+      setSelectedButton(BUTTONS[1]);
+      setSelectedAudio(AUDIOS[1]);
+      setEngravingText("CYBER ATOMIC 01");
+      setScanlinesActive(true);
+    } else if (presetName === "stealth") {
+      const gba = DEVICES.find((d) => d.id === "gba") || DEVICES[1];
+      const black = SHELLS.find((s) => s.id === "matte-black") || SHELLS[1];
+      setSelectedDevice(gba);
+      setSelectedShell(black);
+      setSelectedDisplay(DISPLAYS[1]);
+      setSelectedPower(POWERS[2]);
+      setSelectedButton(BUTTONS[1]);
+      setSelectedAudio(AUDIOS[1]);
+      setEngravingText("MONOLITH STEALTH");
+      setScanlinesActive(false);
+    } else if (presetName === "clear") {
+      const gbc = DEVICES.find((d) => d.id === "gbc") || DEVICES[0];
+      const clear = SHELLS.find((s) => s.id === "clear") || SHELLS[2];
+      setSelectedDevice(gbc);
+      setSelectedShell(clear);
+      setSelectedDisplay(DISPLAYS[1]);
+      setSelectedPower(POWERS[2]);
+      setSelectedButton(BUTTONS[0]);
+      setSelectedAudio(AUDIOS[1]);
+      setEngravingText("OPTICAL TRANSPARENCY");
+      setScanlinesActive(true);
+    }
+  };
 
   const { addItem } = useCart();
 
@@ -99,6 +163,54 @@ export default function CustomBuildPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* LEFT: STEP-BY-STEP CUSTOMIZER */}
           <div className="lg:col-span-7 space-y-12">
+            {/* ATELIER CURATED PRESETS */}
+            <div className="p-4 bg-white/[0.02] border border-white/10 rounded-sm space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#00FF88]">
+                  STUDIO ARCHETYPE PRESETS
+                </span>
+                <span className="text-[10px] font-mono text-neutral-500">1-CLICK CONFIG</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => applyPreset("cyber")}
+                  className="px-3 py-2 bg-[#121212] border border-white/10 hover:border-[#00FF88] text-left rounded-sm transition-all group"
+                >
+                  <span className="text-xs font-bold text-white uppercase group-hover:text-[#00FF88] block">
+                    CYBER ATOMIC
+                  </span>
+                  <span className="text-[10px] text-neutral-400 font-mono block">
+                    Atomic Purple • IPS • CleanAmp
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset("stealth")}
+                  className="px-3 py-2 bg-[#121212] border border-white/10 hover:border-[#00FF88] text-left rounded-sm transition-all group"
+                >
+                  <span className="text-xs font-bold text-white uppercase group-hover:text-[#00FF88] block">
+                    OBSIDIAN STEALTH
+                  </span>
+                  <span className="text-[10px] text-neutral-400 font-mono block">
+                    Matte Black • GBA • Tactical
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset("clear")}
+                  className="px-3 py-2 bg-[#121212] border border-white/10 hover:border-[#00FF88] text-left rounded-sm transition-all group"
+                >
+                  <span className="text-xs font-bold text-white uppercase group-hover:text-[#00FF88] block">
+                    PURE OPTICAL
+                  </span>
+                  <span className="text-[10px] text-neutral-400 font-mono block">
+                    Clear Shell • GBC • Minimal
+                  </span>
+                </button>
+              </div>
+            </div>
+
             {/* STEP 1: CHOOSE YOUR DEVICE */}
             <section className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-white/10">
@@ -400,13 +512,32 @@ export default function CustomBuildPage() {
                     YOUR BUILD
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-[#00FF88] border border-[#00FF88]/30 px-2 py-0.5 rounded-sm">
-                  1 OF 1 BESPOKE
-                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setScanlinesActive(!scanlinesActive)}
+                    className={`px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded-sm border transition-colors ${
+                      scanlinesActive
+                        ? "bg-[#00FF88]/20 border-[#00FF88] text-[#00FF88]"
+                        : "bg-white/[0.04] border-white/10 text-neutral-400 hover:text-white"
+                    }`}
+                  >
+                    SCANLINES: {scanlinesActive ? "ON" : "OFF"}
+                  </button>
+                  <span className="text-[10px] font-mono text-[#00FF88] border border-[#00FF88]/30 px-2 py-0.5 rounded-sm">
+                    1 OF 1 BESPOKE
+                  </span>
+                </div>
               </div>
 
               {/* Live Preview Image & Dynamic Color Accent */}
-              <div className="relative aspect-[16/10] w-full rounded-sm overflow-hidden bg-black border border-white/10 group">
+              <div
+                className="relative aspect-[16/10] w-full rounded-sm overflow-hidden bg-black border transition-all duration-500 group"
+                style={{
+                  borderColor: selectedShell.colorHex !== "#F5F5F0" ? `${selectedShell.colorHex}55` : "rgba(255,255,255,0.15)",
+                  boxShadow: `0 0 25px ${selectedShell.colorHex}20`,
+                }}
+              >
                 <Image
                   src={selectedDevice.previewImage}
                   alt={selectedDevice.name}
@@ -414,12 +545,21 @@ export default function CustomBuildPage() {
                   sizes="400px"
                   className="object-cover"
                 />
+                {scanlinesActive && (
+                  <div
+                    className="absolute inset-0 pointer-events-none z-10 opacity-60"
+                    style={{
+                      backgroundImage:
+                        "repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0px, rgba(0, 0, 0, 0.75) 1px, transparent 1px, transparent 3px)",
+                    }}
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
                 <div
-                  className="absolute bottom-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-sm bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono"
+                  className="absolute bottom-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-sm bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-mono z-20"
                 >
                   <span
-                    className="w-2.5 h-2.5 rounded-full"
+                    className="w-2.5 h-2.5 rounded-full ring-2 ring-white/20"
                     style={{ backgroundColor: selectedShell.colorHex }}
                   />
                   <span className="text-white uppercase">{selectedShell.name}</span>
@@ -500,6 +640,14 @@ export default function CustomBuildPage() {
                 >
                   <span>REQUEST THIS BUILD</span>
                   <span>→</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopySpec}
+                  className="w-full py-2.5 bg-white/[0.04] text-neutral-300 font-mono text-[11px] uppercase tracking-widest hover:bg-white/[0.08] hover:text-white transition-colors rounded-sm border border-white/10 flex items-center justify-center gap-2"
+                >
+                  <span>{copiedSpec ? "✓ DOSSIER COPIED TO CLIPBOARD" : "COPY CONFIGURATION DOSSIER"}</span>
                 </button>
 
                 {orderRequested && (
