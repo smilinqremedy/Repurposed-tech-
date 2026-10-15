@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SITE_CONFIG } from "@/lib/constants";
 import { useCart } from "@/lib/cartContext";
+import { useAudio } from "@/lib/audioContext";
 import { MobileMenu } from "@/components/navigation/MobileMenu";
 import { SearchModal } from "@/components/navigation/SearchModal";
 
@@ -14,6 +15,7 @@ export function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const { itemCount, openCart } = useCart();
+  const { ambientActive, toggleAmbient, playClick } = useAudio();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,6 +94,30 @@ export function Navbar() {
                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                   />
                 </svg>
+              </button>
+
+              {/* Sound Tape Toggle */}
+              <button
+                onClick={() => {
+                  playClick("toggle");
+                  toggleAmbient();
+                }}
+                title={ambientActive ? "Pause Atelier Tape Loop" : "Play Atelier Tape Loop"}
+                aria-label="Toggle atelier audio tape"
+                className={`flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono border rounded-sm transition-all ${
+                  ambientActive
+                    ? "bg-[#00FF88]/15 border-[#00FF88] text-[#00FF88]"
+                    : "bg-white/[0.04] border-white/10 text-neutral-400 hover:text-white"
+                }`}
+              >
+                <div className="flex items-end gap-0.5 h-3 w-3">
+                  <span className={`w-0.5 bg-current rounded-full transition-all ${ambientActive ? "h-2.5 animate-pulse" : "h-1"}`} />
+                  <span className={`w-0.5 bg-current rounded-full transition-all ${ambientActive ? "h-3 animate-bounce" : "h-2"}`} />
+                  <span className={`w-0.5 bg-current rounded-full transition-all ${ambientActive ? "h-1.5 animate-pulse" : "h-1"}`} />
+                </div>
+                <span className="hidden sm:inline uppercase text-[10px] tracking-widest font-bold">
+                  {ambientActive ? "TAPE ON" : "AUDIO"}
+                </span>
               </button>
 
               {/* Admin / Portal Shortcut */}

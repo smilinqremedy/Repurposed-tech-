@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { CartProvider } from "@/lib/cartContext";
+import { AudioProvider } from "@/lib/audioContext";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/cart/CartDrawer";
+import { RetroAudioPlayer } from "@/components/ui/RetroAudioPlayer";
 import { SITE_CONFIG } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -61,12 +63,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark scroll-smooth">
       <body className="bg-[#080808] text-[#F5F5F0] antialiased min-h-screen flex flex-col selection:bg-white selection:text-black">
-        <CartProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <CartDrawer />
-          <Footer />
-        </CartProvider>
+        <AudioProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <CartDrawer />
+            <RetroAudioPlayer />
+            <Footer />
+          </CartProvider>
+        </AudioProvider>
       </body>
     </html>
   );

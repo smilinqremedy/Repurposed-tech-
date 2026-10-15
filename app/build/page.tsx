@@ -13,8 +13,10 @@ import {
 } from "@/lib/buildOptions";
 import { formatNaira } from "@/lib/currency";
 import { useCart } from "@/lib/cartContext";
+import { useAudio } from "@/lib/audioContext";
 
 export default function CustomBuildPage() {
+  const { playClick, playChime, playCrt, playHardwareSample } = useAudio();
   const [selectedDevice, setSelectedDevice] = useState(DEVICES[0]);
   const [selectedShell, setSelectedShell] = useState(SHELLS[0]);
   const [selectedDisplay, setSelectedDisplay] = useState(DISPLAYS[1]); // Default IPS
@@ -53,6 +55,7 @@ export default function CustomBuildPage() {
   };
 
   const applyPreset = (presetName: "cyber" | "stealth" | "clear") => {
+    playChime();
     if (presetName === "cyber") {
       const gbc = DEVICES.find((d) => d.id === "gbc") || DEVICES[0];
       const purple = SHELLS.find((s) => s.id === "atomic-purple") || SHELLS[0];
@@ -107,12 +110,14 @@ export default function CustomBuildPage() {
     extrasTotal;
 
   const toggleExtra = (id: string) => {
+    playClick("toggle");
     setSelectedExtras((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
   const handleRequestBuild = () => {
+    playChime();
     const extrasNames = selectedExtras
       .map((id) => EXTRAS.find((e) => e.id === id)?.name)
       .filter(Boolean)
@@ -227,7 +232,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={device.id}
-                      onClick={() => setSelectedDevice(device)}
+                      onClick={() => {
+                        playClick("heavy");
+                        setSelectedDevice(device);
+                      }}
                       className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -272,7 +280,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={shell.id}
-                      onClick={() => setSelectedShell(shell)}
+                      onClick={() => {
+                        playClick("light");
+                        setSelectedShell(shell);
+                      }}
                       className={`p-3.5 rounded-sm border text-left transition-all relative ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -317,7 +328,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={disp.id}
-                      onClick={() => setSelectedDisplay(disp)}
+                      onClick={() => {
+                        playClick("light");
+                        setSelectedDisplay(disp);
+                      }}
                       className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -351,7 +365,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={pow.id}
-                      onClick={() => setSelectedPower(pow)}
+                      onClick={() => {
+                        playClick("light");
+                        setSelectedPower(pow);
+                      }}
                       className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -386,7 +403,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={btn.id}
-                      onClick={() => setSelectedButton(btn)}
+                      onClick={() => {
+                        playClick("light");
+                        setSelectedButton(btn);
+                      }}
                       className={`p-3.5 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -420,7 +440,10 @@ export default function CustomBuildPage() {
                     <button
                       type="button"
                       key={aud.id}
-                      onClick={() => setSelectedAudio(aud)}
+                      onClick={() => {
+                        playClick("light");
+                        setSelectedAudio(aud);
+                      }}
                       className={`p-4 rounded-sm border text-left transition-all ${
                         isSelected
                           ? "bg-white/[0.06] border-white ring-1 ring-white"
@@ -435,6 +458,18 @@ export default function CustomBuildPage() {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Live CleanAmp Audition Action */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => playHardwareSample("chiptune")}
+                  className="w-full py-2.5 px-3 bg-[#00FF88]/10 border border-[#00FF88]/30 hover:bg-[#00FF88]/20 text-[#00FF88] text-[10px] font-mono uppercase font-bold tracking-widest rounded-sm transition-all flex items-center justify-center gap-2"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00FF88] animate-ping" />
+                  <span>▶ AUDITION CLEANAMP ACOUSTIC BENCHMARK (CHIPTUNE)</span>
+                </button>
               </div>
             </section>
 
@@ -515,7 +550,10 @@ export default function CustomBuildPage() {
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => setScanlinesActive(!scanlinesActive)}
+                    onClick={() => {
+                      playCrt();
+                      setScanlinesActive(!scanlinesActive);
+                    }}
                     className={`px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase rounded-sm border transition-colors ${
                       scanlinesActive
                         ? "bg-[#00FF88]/20 border-[#00FF88] text-[#00FF88]"

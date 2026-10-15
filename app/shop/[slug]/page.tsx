@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { PRODUCTS } from "@/lib/products";
 import { formatNaira } from "@/lib/currency";
 import { useCart } from "@/lib/cartContext";
+import { useAudio } from "@/lib/audioContext";
 import { ImageGallery } from "@/components/products/ImageGallery";
 import { ProductSpecs } from "@/components/products/ProductSpecs";
 import { RestorationTimeline } from "@/components/products/RestorationTimeline";
@@ -23,6 +24,7 @@ export default function ShopProductDetailPage({ params }: ProductPageProps) {
   const product = PRODUCTS.find((p) => p.slug === slug);
 
   const { addItem } = useCart();
+  const { playClick, playChime, playHardwareSample, activeSample } = useAudio();
   const [savedForLater, setSavedForLater] = useState(false);
   const [addedToast, setAddedToast] = useState(false);
 
@@ -121,10 +123,72 @@ export default function ShopProductDetailPage({ params }: ProductPageProps) {
               </p>
             </div>
 
+            {/* ACOUSTIC BENCHMARK SOUND CHECK */}
+            {(() => {
+              const sample = (() => {
+                if (product.id === "rt-002") {
+                  return { type: "wolfson" as const, label: "WOLFSON WM8758 DAC WARMTH", desc: "Warm harmonic audio reproduction benchmarked through studio monitors." };
+                }
+                if (product.id === "rt-004") {
+                  return { type: "thock" as const, label: "180Hz MECHANICAL THOCK", desc: "Acoustic resonance frequency of lubed switches against 4mm solid brass plate." };
+                }
+                if (product.id === "rt-005") {
+                  return { type: "shutter" as const, label: "1974 LEAF SHUTTER ACTION", desc: "Full clockwork mechanical escapement and leaf curtain timing capture." };
+                }
+                if (product.id === "rt-006" || product.id === "rt-008") {
+                  return { type: "cyberdeck" as const, label: "AVIONICS TELEMETRY PING", desc: "High-contrast piezoelectric terminal frequency telemetry pulse." };
+                }
+                if (product.id === "rt-007") {
+                  return { type: "braun" as const, label: "DIETER RAMS 440Hz PURITY", desc: "Laboratory sine wave calibration tone through Class-D amplifier stage." };
+                }
+                return { type: "chiptune" as const, label: "CLEANAMP PRO CHIPTUNE SWEEP", desc: "High-output ceramic transducer pulse wave with zero hum filtering." };
+              })();
+
+              const isPlaying = activeSample === sample.type;
+
+              return (
+                <div className="p-4 bg-[#0F0F0F] border border-white/10 rounded-sm space-y-3 font-mono">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className={`w-2 h-2 rounded-full ${isPlaying ? "bg-[#00FF88] animate-ping" : "bg-[#00FF88]"}`} />
+                      <span className="text-[10px] uppercase tracking-widest text-[#00FF88] font-bold">
+                        ACOUSTIC BENCHMARK & SOUND CHECK
+                      </span>
+                    </div>
+                    <span className="text-[9px] text-neutral-500 uppercase border border-white/10 px-1.5 py-0.5 rounded-sm">
+                      LAB CALIBRATED
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-neutral-400 leading-relaxed font-sans">
+                    {sample.desc}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => playHardwareSample(sample.type)}
+                    className={`w-full py-2.5 px-3 border rounded-sm transition-all flex items-center justify-center gap-2.5 text-xs uppercase font-bold tracking-wider ${
+                      isPlaying
+                        ? "bg-[#00FF88] text-black border-[#00FF88] shadow-lg shadow-[#00FF88]/20"
+                        : "bg-white/[0.04] text-white border-white/15 hover:border-[#00FF88] hover:text-[#00FF88]"
+                    }`}
+                  >
+                    <div className="flex items-end gap-0.5 h-3.5 w-3.5">
+                      <span className={`w-0.5 bg-current rounded-full transition-all ${isPlaying ? "h-3 animate-pulse" : "h-1"}`} />
+                      <span className={`w-0.5 bg-current rounded-full transition-all ${isPlaying ? "h-3.5 animate-bounce" : "h-2"}`} />
+                      <span className={`w-0.5 bg-current rounded-full transition-all ${isPlaying ? "h-2 animate-pulse" : "h-1.5"}`} />
+                    </div>
+                    <span>{isPlaying ? `AUDITIONING: ${sample.label}...` : `▶ AUDITION: ${sample.label}`}</span>
+                  </button>
+                </div>
+              );
+            })()}
+
             {/* CTAs */}
             <div className="space-y-3 pt-2">
               <button
-                onClick={handleAddToCart}
+                onClick={() => {
+                  playChime();
+                  handleAddToCart();
+                }}
                 disabled={product.status === "sold-out" || product.status === "coming-soon"}
                 className="w-full py-4 bg-white text-black font-mono text-xs font-bold tracking-[0.2em] uppercase hover:bg-[#00FF88] transition-all rounded-sm shadow-xl flex items-center justify-center gap-2 disabled:bg-neutral-800 disabled:text-neutral-500 disabled:cursor-not-allowed"
               >
@@ -142,7 +206,10 @@ export default function ShopProductDetailPage({ params }: ProductPageProps) {
               </button>
 
               <button
-                onClick={() => setSavedForLater(!savedForLater)}
+                onClick={() => {
+                  playClick("toggle");
+                  setSavedForLater(!savedForLater);
+                }}
                 className={`w-full py-3.5 border font-mono text-xs uppercase tracking-widest transition-colors rounded-sm flex items-center justify-center gap-2 ${
                   savedForLater
                     ? "border-[#00FF88] text-[#00FF88] bg-[#00FF88]/5"
